@@ -6,26 +6,26 @@ import questionary
 import cli
 
 def process_and_save(image_path, filter_chain):
-    """Loads image, applies the sequential stack, and saves to /out."""
+    """Loads image, applies filters, and saves to /out dir."""
     print(f"\n⏳ Loading image: {image_path}...")
     try:
-        # Load and convert to RGB (to avoid issues with RGBA in NumPy matrix multiplications)
+        # Load and convert color channel to RGB
         img = Image.open(image_path).convert('RGB')
         pixels = np.array(img)
 
-        # Apply filters in exact order
+        # Apply filters' stack
         for f in filter_chain:
             print(f"   Applying: {f['label']}...")
             pixels = f["func"](pixels, **f["kwargs"])
 
-        # Ensure output directory exists
+        # pastikan 'out' dir
         os.makedirs("out", exist_ok=True)
 
-        # Generate Smart Filename
-        base_name = os.path.basename(image_path)
-        name, ext = os.path.splitext(base_name)
-        filter_names = "_".join([f["label"].split()[0].lower() for f in filter_chain])
-        out_filename = f"{name}_{filter_names}{ext}"
+        # Generate Filename
+        base_name = os.path.basename(image_path) # nama asal
+        name, ext = os.path.splitext(base_name) # pisahkan nama ekstensi
+        filter_names = "_".join([f["label"].split()[0].lower() for f in filter_chain]) # nama filter urut stack
+        out_filename = f"{name}_{filter_names}{ext}" # namaAsal_Filter.ekstensi
         out_path = os.path.join(os.getcwd(), "out", out_filename)
 
         # Save image

@@ -6,6 +6,7 @@ from questionary import Validator, ValidationError
 import filters
 
 class NumberValidator(Validator):
+    """Validasi tipe data float."""
     def validate(self, document):
         try:
             float(document.text)
@@ -14,6 +15,7 @@ class NumberValidator(Validator):
 
 
 class IntValidator(Validator):
+    """Validasi tipe data int."""
     def validate(self, document):
         try:
             int(document.text)
@@ -22,7 +24,7 @@ class IntValidator(Validator):
 
 
 def configure_filter(filter_name):
-    """Prompts the user for specific arguments based on the chosen filter."""
+    """Condisional untuk pemilihan filter dengan arrow key."""
     if filter_name == "Brightness":
         action = questionary.select("Action:", choices=["Lighten", "Darken"]).ask()
         if not action: return None
